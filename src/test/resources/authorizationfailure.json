@@ -1,0 +1,27 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {},
+    "properties": {
+        "message": {
+            "id": "/properties/message",
+            "type": "string",
+             "enum": ["Authorization Failure","Not a Franchise User","Unauthorized.","Object not Found","Something went wrong","Action Not Allowed","Not Allowed To Undo"]
+        },
+        "responseData": {
+            "id": "/properties/responseData",
+            "properties": {},
+            "type": "object"
+        },
+        "status": {
+            "id": "/properties/status",
+            "type": "boolean",
+            "enum": [false]
+        }
+    },
+    "required": [
+        "status",
+        "responseData",
+        "message"
+    ],
+    "type": "object"
+}

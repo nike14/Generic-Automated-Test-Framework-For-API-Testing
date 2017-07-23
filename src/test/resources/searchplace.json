@@ -1,0 +1,222 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "definitions": {},
+    "id": "https://maps.googleapis.com/maps/api/place/textsearch/json",
+    "properties": {
+        "html_attributions": {
+            "id": "/properties/html_attributions",
+            "items": {},
+            "type": "array"
+        },
+        "next_page_token": {
+            "id": "/properties/next_page_token",
+            "type": "string"
+        },
+        "results": {
+            "id": "/properties/results",
+            "items": {
+                "additionalProperties": false,
+                "id": "/properties/results/items",
+                "properties": {
+                    "formatted_address": {
+                        "id": "/properties/results/items/properties/formatted_address",
+                        "type": "string"
+                    },
+                    "geometry": {
+                        "additionalProperties": false,
+                        "id": "/properties/results/items/properties/geometry",
+                        "properties": {
+                            "location": {
+                                "additionalProperties": false,
+                                "id": "/properties/results/items/properties/geometry/properties/location",
+                                "properties": {
+                                    "lat": {
+                                        "id": "/properties/results/items/properties/geometry/properties/location/properties/lat",
+                                        "type": "number"
+                                    },
+                                    "lng": {
+                                        "id": "/properties/results/items/properties/geometry/properties/location/properties/lng",
+                                        "type": "number"
+                                    }
+                                },
+                                "required": [
+                                    "lat",
+                                    "lng"
+                                ],
+                                "type": "object"
+                            },
+                            "viewport": {
+                                "additionalProperties": false,
+                                "id": "/properties/results/items/properties/geometry/properties/viewport",
+                                "properties": {
+                                    "northeast": {
+                                        "additionalProperties": false,
+                                        "id": "/properties/results/items/properties/geometry/properties/viewport/properties/northeast",
+                                        "properties": {
+                                            "lat": {
+                                                "id": "/properties/results/items/properties/geometry/properties/viewport/properties/northeast/properties/lat",
+                                                "type": "number"
+                                            },
+                                            "lng": {
+                                                "id": "/properties/results/items/properties/geometry/properties/viewport/properties/northeast/properties/lng",
+                                                "type": "number"
+                                            }
+                                        },
+                                        "required": [
+                                            "lat",
+                                            "lng"
+                                        ],
+                                        "type": "object"
+                                    },
+                                    "southwest": {
+                                        "additionalProperties": false,
+                                        "id": "/properties/results/items/properties/geometry/properties/viewport/properties/southwest",
+                                        "properties": {
+                                            "lat": {
+                                                "id": "/properties/results/items/properties/geometry/properties/viewport/properties/southwest/properties/lat",
+                                                "type": "number"
+                                            },
+                                            "lng": {
+                                                "id": "/properties/results/items/properties/geometry/properties/viewport/properties/southwest/properties/lng",
+                                                "type": "number"
+                                            }
+                                        },
+                                        "required": [
+                                            "lat",
+                                            "lng"
+                                        ],
+                                        "type": "object"
+                                    }
+                                },
+                                "required": [
+                                    "northeast",
+                                    "southwest"
+                                ],
+                                "type": "object"
+                            }
+                        },
+                        "required": [
+                            "location",
+                            "viewport"
+                        ],
+                        "type": "object"
+                    },
+                    "icon": {
+                        "id": "/properties/results/items/properties/icon",
+                        "type": "string"
+                    },
+                    "id": {
+                        "id": "/properties/results/items/properties/id",
+                        "type": "string"
+                    },
+                    "name": {
+                        "id": "/properties/results/items/properties/name",
+                        "type": "string"
+                    },
+                    "opening_hours": {
+                        "additionalProperties": false,
+                        "id": "/properties/results/items/properties/opening_hours",
+                        "properties": {
+                            "open_now": {
+                                "id": "/properties/results/items/properties/opening_hours/properties/open_now",
+                                "type": "boolean"
+                            },
+                            "weekday_text": {
+                                "id": "/properties/results/items/properties/opening_hours/properties/weekday_text",
+                                "items": {},
+                                "type": "array"
+                            }
+                        },
+                        "required": [
+                            "weekday_text",
+                            "open_now"
+                        ],
+                        "type": "object"
+                    },
+                    "photos": {
+                        "id": "/properties/results/items/properties/photos",
+                        "items": {
+                            "additionalProperties": false,
+                            "id": "/properties/results/items/properties/photos/items",
+                            "properties": {
+                                "height": {
+                                    "id": "/properties/results/items/properties/photos/items/properties/height",
+                                    "type": "integer"
+                                },
+                                "html_attributions": {
+                                    "id": "/properties/results/items/properties/photos/items/properties/html_attributions",
+                                    "items": {
+                                        "id": "/properties/results/items/properties/photos/items/properties/html_attributions/items",
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "photo_reference": {
+                                    "id": "/properties/results/items/properties/photos/items/properties/photo_reference",
+                                    "type": "string"
+                                },
+                                "width": {
+                                    "id": "/properties/results/items/properties/photos/items/properties/width",
+                                    "type": "integer"
+                                }
+                            },
+                            "required": [
+                                "photo_reference",
+                                "width",
+                                "html_attributions",
+                                "height"
+                            ],
+                            "type": "object"
+                        },
+                        "type": "array"
+                    },
+                    "place_id": {
+                        "id": "/properties/results/items/properties/place_id",
+                        "type": "string"
+                    },
+                    "rating": {
+                        "id": "/properties/results/items/properties/rating",
+                        "type": "number"
+                    },
+                    "reference": {
+                        "id": "/properties/results/items/properties/reference",
+                        "type": "string"
+                    },
+                    "types": {
+                        "id": "/properties/results/items/properties/types",
+                        "items": {
+                            "id": "/properties/results/items/properties/types/items",
+                            "type": "string"
+                        },
+                        "type": "array"
+                    }
+                },
+                "required": [
+                    "name",
+                    "reference",
+                    "geometry",
+                    "place_id",
+                    "formatted_address",
+                    "id",
+                    "types",
+                    "icon"
+                ],
+                "type": "object"
+            },
+            "type": "array"
+        },
+        "status": {
+            "id": "/properties/status",
+            "type": "string",
+            "enum": ["OK"]
+        }
+    },
+    "required": [
+        "status",
+        "next_page_token",
+        "html_attributions",
+        "results"
+    ],
+    "type": "object"
+}

@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "definitions": {},
+    "id": "https://maps.googleapis.com/maps/api/place/add/json",
+    "properties": {
+        "status": {
+            "id": "/properties/status",
+            "type": "string",
+             "enum": ["OK"]
+        }
+    },
+    "required": [
+        "status"
+    ],
+    "type": "object"
+}

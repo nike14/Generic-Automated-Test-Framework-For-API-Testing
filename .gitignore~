@@ -1,0 +1,12 @@
+*.txt
+/logs/*
+/target/*
+/Reports/*
+/LogIssues/*
+/test-output/*
+/.classpath
+/.project
+/.settings/*
+/target/
+/hsql/
+/java_pid*

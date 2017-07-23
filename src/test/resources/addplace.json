@@ -1,0 +1,37 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "additionalProperties": false,
+    "definitions": {},
+    "id": "https://maps.googleapis.com/maps/api/place/add/json",
+    "properties": {
+        "id": {
+            "id": "/properties/id",
+            "type": "string"
+        },
+        "place_id": {
+            "id": "/properties/place_id",
+            "type": "string"
+        },
+        "reference": {
+            "id": "/properties/reference",
+            "type": "string"
+        },
+        "scope": {
+            "id": "/properties/scope",
+            "type": "string"
+        },
+        "status": {
+            "id": "/properties/status",
+            "type": "string",
+             "enum": ["OK"]
+        }
+    },
+    "required": [
+        "status",
+        "scope",
+        "place_id",
+        "id",
+        "reference"
+    ],
+    "type": "object"
+}
