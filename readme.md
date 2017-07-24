@@ -13,7 +13,8 @@ API Framework that does not require you to write code for almost all APIS.
 
 * Clone repository.
 * Go to src/test/resources/ExcelData
-* Open com.framework.constants >> Constants.java 
+* Go to src/main/java
+* Open package com.framework.constants >> Constants.java(Class file) 
 * Check your excel file name and EXCEL_PATH is correct. 
 * [Generate a key](https://developers.google.com/places/web-service/get-api-key) for google places.
 * Open Excel and modify $$$$$$$$$$ from parameters column to above generated key.
