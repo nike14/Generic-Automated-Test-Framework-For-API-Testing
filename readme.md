@@ -8,31 +8,30 @@ API Framework that does not require you to write code for almost all APIS.
 ## Requirements
 
 * Java 1.8
+* Install maven.
 
 ## Configuration
 
 * Clone repository.
+* Delete client_secret.json from src/main/resources.
+* Turn on the [Drive api](https://developers.google.com/drive/v2/web/quickstart/java) (Step 1 only)
+* Move client_secret.json to src/main/resources and give file name **client_secret.json**  
 * Go to src/test/resources/ExcelData
-* Go to src/main/java
-* Open package com.framework.constants >> Constants.java(Class file) 
-* Check your excel file name and EXCEL_PATH is correct. 
-* [Generate a key](https://developers.google.com/places/web-service/get-api-key) for google places.
-* Open Excel and modify $$$$$$$$$$ from parameters column to above generated key.
+* Upload excel file to your drive and open with google spreadsheet.
+* For generating key from google place [Click here](https://developers.google.com/places/web-service/get-api-key) and click on **GET A KEY** button.
+* Open Drive Excel and modify $$$$$$$ from parameters column to above generated key.
+* Copy **excel id** from spreadsheet URL e.g **1eXH2bB1KiQB7lB6zNq67gyiURbdsfGgsiwq0efqrqXc** from URL "https://docs.google.com/spreadsheets/d/1eXH2bB1KiQB7lB6zNq67gyiURbdsfGgsiwq0efqrqXc/edit#gid=391694237"
+* Go to src/main/java/com/framework/constants >> Constants.java
+* Search EXCELFILEPATH variable and change to above **excel id** and save file. 
+* Modify/check your **Application Name** in com.framework.constants >> Constants.java >> APPLICATIONNAME(As per given in google drive)
 
 For more detail refer guidelines.
 
-## Optional Configuration(Added support for Google drive)
- 
-* Install maven.
-* Turn on the [Drive api](https://developers.google.com/drive/v2/web/quickstart/java)
-* Move client_secret.json to src/main/resources
-* Upload excel file to your drive.
-* Modify your **excel path** in com.framework.constants >> Constants.java >> EXCELFILEPATH , Modify your **Application Name** in com.framework.constants >> Constants.java >> APPLICATIONNAME(As per given in google drive)
-
-	
 ## Run
 
 * mvn clean compile test **or** Open testng.xml file and Run As TestNG Suite.
+* After running above command one new window will generate and select previously used email address.
+* Click on **Allow** button.
 
 ## Reports
 
