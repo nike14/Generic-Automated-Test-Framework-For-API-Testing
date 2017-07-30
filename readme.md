@@ -48,14 +48,14 @@ For more detail refer guidelines.
 	
 ## Guidelines
 
-* #1.id# -> Use for single value replacement.
-* @1.id@ -> Use for List replacement for only assert response.
+* #sheetName.1.id# -> Use for single value replacement.
+* @sheetName.1.id@ -> Use for List replacement for only assert response.
 
 ### Run mode for TestFlow: 
 
 Runmode helps for running particular TestFlow.
 
-TCID | RunMode | TFNameAndDesc | TCName
+Test Id | Test Mode | Test Flow Name | Test Case Name
 --- | --- | --- | ---
 1 | Yes | Get Token for users | getAccessTokenForOpsUser
 2 | | | getAccessTokenForWMGJ|
@@ -67,7 +67,7 @@ TCID | RunMode | TFNameAndDesc | TCName
 
 Extract values from the response and use for the next test cases.
 
-Method and json path |
+Test Method and json path |
 ---|
 **extractString**:$.responseData.X-Authorization-Token|
 **extractNumber**:$.responseData.packages[0].amount|
@@ -81,19 +81,19 @@ Method and json path |
 
 Extract dynamic values for the below column:
 
-* URL
-* Input Json
-* Headers
-* Parameters
-* Assert Response
+* Test Url
+* Test Input Json
+* Test Headers
+* Test Parameters
+* Test Assert Response
 
 For Example
 
-* **URL**: /lppayment/#**sheet name.Test Id.path**#/    ------> **i.e** #googleplace.1.lng#
-* **Assert Response**: 
+* **Test Url**: /lppayment/#**sheetName.Test Id.path**#/    ------> **i.e** #googleplace.1.lng#
+* **Test Assert Response**: 
 	* #googleplace.14.reconciliationStatus#,to_be_paid
 	* #googleplace.15.reconciliationStatus#,#googleplace.14.reconciliationStatus#**;**#googleplace.14.reconciliationStatus#,to_be_paid (Compare more than 2 values separated by **;**)
-* **Assert Response List**:
+* **Test Assert Response List**:
 	* @googleplace.24.status@,waiting_for_clearance;#googleplace.23.reconciliationStatus#,to_be_paid (Use @ @ means list replacement always first in assert column than # # single value replacement)
 	
 ![alt text](https://i.imgur.com/pyIR5eD.png)	
@@ -102,7 +102,7 @@ For Example
 
 * Add your schema under src/test/resources
 
-output |
+Test Schema Name |
 ---|
 accesstokensuccess.json|
 
@@ -123,4 +123,4 @@ accesstokensuccess.json|
 
 For Example
 
-* **Parameters**: ?createdFrom=#epoch.0.startdatetoday#&createdTo=#epoch.0.enddatetoday#
+* **Test Parameters**: ?createdFrom=#epoch.0.startdatetoday#&createdTo=#epoch.0.enddatetoday#
