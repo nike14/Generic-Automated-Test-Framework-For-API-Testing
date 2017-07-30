@@ -27,7 +27,7 @@ For more detail refer guidelines.
 * Move client_secret.json to src/main/resources and give file name **client_secret.json**  
 * Go to src/test/resources/ExcelData
 * Upload excel file to your drive and open with google spreadsheet.
-* Copy **excel id**:![alt text](https://i.imgur.com/5pOTkAz.png from spreadsheet) 
+* Copy **excel id**:![alt text](https://i.imgur.com/5pOTkAz.png)
 * Go to src/main/java/com/framework/constants >> Constants.java
 * Search EXCELFILEPATH variable and change to above **excel id** and save file. 
 * Modify/check your **Application Name** in com.framework.constants >> Constants.java >> APPLICATIONNAME(As per given in google drive)
