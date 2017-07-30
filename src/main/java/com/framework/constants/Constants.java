@@ -3,14 +3,13 @@
  */
 package com.framework.constants;
 
-import java.util.LinkedHashMap;
-
 /**
  * @author nikhil
  *
  */
 public class Constants {
 	public static final String PROJECT_PATH = System.getProperty("user.dir");
+
 	public static final String PROJECT_OS = System.getProperty("os.name");
 
 	public static final String EXCEL_PATH = PROJECT_PATH + java.io.File.separatorChar + "src"
@@ -22,14 +21,7 @@ public class Constants {
 			+ java.io.File.separatorChar;
 
 	public static final String LOG4J_PATH = PROJECT_PATH + java.io.File.separatorChar + "log4j.properties";
-	public static final StringBuffer TESTSUITE = new StringBuffer("TestSuite");
-	public static final StringBuffer TESTFLOW = new StringBuffer("TestFlows");
-	public static final StringBuffer TESTDATA = new StringBuffer("TestData");
-	public static final StringBuffer TSNAME = new StringBuffer("TSName");
-	public static final StringBuffer TFNAME = new StringBuffer("TFName");
-	public static final StringBuffer RUNMODE = new StringBuffer("RunMode");
-	public static LinkedHashMap<String, String> testDataMap = new LinkedHashMap<String, String>();
-	public static final StringBuffer RUNMODEVALUE = new StringBuffer("Yes");
+
 	public static final String REPORTS_PATH = PROJECT_PATH + java.io.File.separatorChar + "Reports"
 			+ java.io.File.separatorChar;
 
@@ -37,9 +29,17 @@ public class Constants {
 		public static final StringBuffer RUNMODE = new StringBuffer("Yes");
 	}
 
+	public static class FactoryHelperConstants {
+		public static final StringBuffer SHEETNAME = new StringBuffer("testsuite");
+	}
+	
+	public static class ApiTestFactoryConstants{
+		public static final StringBuffer SHEETNAME = new StringBuffer("epoch");
+	}
+
 	public static class DownloadExcelFileHelperConstants {
 		public static final StringBuffer EXCELFILEPATH = new StringBuffer(
-				"1sWxJZdDyPDDvER8guj-ILtI4gaRcgIOQm45V7kCr6Y4");
+				"");
 		public static final StringBuffer CLIENTSECRETJSON = new StringBuffer("/client_secret.json");
 		public static final StringBuffer FILETYPE = new StringBuffer(
 				"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -49,15 +49,7 @@ public class Constants {
 	}
 
 	public static class ApiExecutorConstants {
-
 		public static final StringBuffer CONTENTTYPE = new StringBuffer("application/json");
-		public static final StringBuffer JSONOBJCTRESPONCEDATA = new StringBuffer("responseData");
-		public static final StringBuffer ACCESSTOKEN = new StringBuffer("X-Authorization-Token");
-		public static final StringBuffer USERNAME = new StringBuffer("username");
-		public static final String INVALIDTOKEN = "invalidtoken";
-		public static final String EXTENDTOKENLENGTH = "extendtokenlength";
-		public static final String EXPIRETOKEN = "expiretoken";
-		public static final String EXPIRETOKENVALUE = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZGVudGl0eSI6IjBhN2U2YjQ1LTNjMzctNDBkZS04YjVjLTU4MzQ2OTQxY2EyMyIsImlhdCI6MTQ2MzQxMTkyNiwibmJmIjoxNDYzNDExOTI2LCJleHAiOjE0NjM0NDA3MjZ9.6MttQU5mKBeCOVuFddtSTQWVEb7BfM37IIezskXzajM";
 	}
 
 	public static class RestAssuredHelperConstant {
@@ -65,15 +57,23 @@ public class Constants {
 		public static final String GET = "get";
 		public static final String PUT = "put";
 		public static final String DELETE = "delete";
-		public static final String SETACCESSTOKEN = "setaccesstoken";
+		public static final String PATCH = "patch";
 	}
 
-	public static class GetAccessTokenConstant {
-		public static final StringBuffer URL = new StringBuffer("url");
-		public static final StringBuffer INPUTJSON = new StringBuffer("input json");
-		public static final StringBuffer HEADERS = new StringBuffer("headers");
-		public static final StringBuffer PARAMETERS = new StringBuffer("parameters");
-		public static final StringBuffer ASSERTRESPONSE = new StringBuffer("assert response");
+	public static class ExcelColumnNameConstant {
+		public static final StringBuffer TESTID = new StringBuffer("test id");
+		public static final StringBuffer TESTMODE = new StringBuffer("test mode");
+		public static final StringBuffer TESTFLOWNAME = new StringBuffer("test flow name");
+		public static final StringBuffer TESTCASENAME = new StringBuffer("test case name");
+		public static final StringBuffer TESTAPITYPE = new StringBuffer("test api type");
+		public static final StringBuffer TESTURL = new StringBuffer("test url");
+		public static final StringBuffer TESTINPUTJSON = new StringBuffer("test input json");
+		public static final StringBuffer TESTHEADERS = new StringBuffer("test headers");
+		public static final StringBuffer TESTSCHEMANAME = new StringBuffer("test schema name");
+		public static final StringBuffer TESTEXPECTEDSTATUSCODE = new StringBuffer("test expected status code");
+		public static final StringBuffer TESTPARAMETERS = new StringBuffer("test parameters");
+		public static final StringBuffer TESTMETHODANDJSONPATH = new StringBuffer("test method and json path");
+		public static final StringBuffer TESTASSERTRESPONSE = new StringBuffer("test assert response");
 	}
 
 	public static class InMemoryDatabaseHelperConstant {
@@ -81,9 +81,9 @@ public class Constants {
 		public static final StringBuffer CREATINGCONNECTIONFORHSQLDB = new StringBuffer("jdbc:hsqldb:mem:.");
 		public static final StringBuffer TABLENAME = new StringBuffer("testcase_response");
 		public static final StringBuffer TESTCASEID = new StringBuffer("tcid");
+		public static final StringBuffer SHEETNAME = new StringBuffer("sheetname");
 		public static final StringBuffer PATHVALUE = new StringBuffer("pathvalue");
 		public static final StringBuffer RESPONSEVALUE = new StringBuffer("responsevalue");
-
 	}
 
 	public static class RestUtilConstant {

@@ -3,14 +3,11 @@
  */
 package com.framework.utility;
 
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
 
+import java.util.LinkedHashMap;
 import org.apache.http.util.TextUtils;
 import org.testng.Assert;
-
+import com.framework.constants.Constants.ExcelColumnNameConstant;
 import com.framework.constants.Constants.RestAssuredHelperConstant;
 import com.framework.restassured.ApiExecutor;
 import com.relevantcodes.extentreports.ExtentTest;
@@ -27,49 +24,60 @@ public class RestAssuredHelper {
 	ApiExecutor apiObj = new ApiExecutor();
 	Reflection reflectionObj = new Reflection();
 
-	public void apiExecutorHelper(LinkedHashMap<String, String> data, ExtentTest extentTest) {
+	public void apiExecutorHelper(LinkedHashMap<String, String> data, ExtentTest extentTest,String sheetName) {
 
 		Response resp;
-		String apiType = data.get("api type");
-		int expectedResponseCode = Integer.parseInt(data.get("expected status code"));
+		String apiType = data.get(ExcelColumnNameConstant.TESTAPITYPE.toString());
+		int expectedResponseCode = Integer
+				.parseInt(data.get(ExcelColumnNameConstant.TESTEXPECTEDSTATUSCODE.toString()));
 		switch (apiType.toLowerCase()) {
 
 		case RestAssuredHelperConstant.GET:
 			resp = apiObj.apiGet(data, extentTest);
 			Assert.assertEquals(resp.getStatusCode(), expectedResponseCode);
-			if (!TextUtils.isEmpty(data.get("method and json path"))) {
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTMETHODANDJSONPATH.toString()))) {
 				LinkedHashMap<String, String> methodAndJsonPathMap = reflectionObj.separateMethodAndJsonPath(data,
 						extentTest);
-				reflectionObj.invokeReflection(data, methodAndJsonPathMap, resp, extentTest);
+				reflectionObj.invokeReflection(data, methodAndJsonPathMap, resp, extentTest,sheetName);
 			}
 			break;
 
 		case RestAssuredHelperConstant.POST:
 			resp = apiObj.apiPost(data, extentTest);
 			Assert.assertEquals(resp.getStatusCode(), expectedResponseCode);
-			if (!TextUtils.isEmpty(data.get("method and json path"))) {
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTMETHODANDJSONPATH.toString()))) {
 				LinkedHashMap<String, String> methodAndJsonPathMap = reflectionObj.separateMethodAndJsonPath(data,
 						extentTest);
-				reflectionObj.invokeReflection(data, methodAndJsonPathMap, resp, extentTest);
+				reflectionObj.invokeReflection(data, methodAndJsonPathMap, resp, extentTest,sheetName);
 			}
 			break;
 		case RestAssuredHelperConstant.PUT:
 			resp = apiObj.apiPut(data, extentTest);
 			Assert.assertEquals(resp.getStatusCode(), expectedResponseCode);
-			if (!TextUtils.isEmpty(data.get("method and json path"))) {
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTMETHODANDJSONPATH.toString()))) {
 				LinkedHashMap<String, String> methodAndJsonPathMap = reflectionObj.separateMethodAndJsonPath(data,
 						extentTest);
-				reflectionObj.invokeReflection(data, methodAndJsonPathMap, resp, extentTest);
+				reflectionObj.invokeReflection(data, methodAndJsonPathMap, resp, extentTest,sheetName);
 			}
 			break;
 
 		case RestAssuredHelperConstant.DELETE:
 			resp = apiObj.apiDelete(data, extentTest);
 			Assert.assertEquals(resp.getStatusCode(), expectedResponseCode);
-			if (!TextUtils.isEmpty(data.get("method and json path"))) {
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTMETHODANDJSONPATH.toString()))) {
 				LinkedHashMap<String, String> methodAndJsonPathMap = reflectionObj.separateMethodAndJsonPath(data,
 						extentTest);
-				reflectionObj.invokeReflection(data, methodAndJsonPathMap, resp, extentTest);
+				reflectionObj.invokeReflection(data, methodAndJsonPathMap, resp, extentTest,sheetName);
+			}
+			break;
+			
+		case RestAssuredHelperConstant.PATCH:
+			resp = apiObj.apiPatch(data, extentTest);
+			Assert.assertEquals(resp.getStatusCode(), expectedResponseCode);
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTMETHODANDJSONPATH.toString()))) {
+				LinkedHashMap<String, String> methodAndJsonPathMap = reflectionObj.separateMethodAndJsonPath(data,
+						extentTest);
+				reflectionObj.invokeReflection(data, methodAndJsonPathMap, resp, extentTest,sheetName);
 			}
 			break;
 

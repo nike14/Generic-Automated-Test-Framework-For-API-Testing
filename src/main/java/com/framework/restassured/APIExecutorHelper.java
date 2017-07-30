@@ -6,6 +6,7 @@ package com.framework.restassured;
 import java.util.LinkedHashMap;
 
 import com.framework.commans.Commans.DataUtilCommans;
+import com.framework.constants.Constants.ExcelColumnNameConstant;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
@@ -22,7 +23,7 @@ public class APIExecutorHelper {
 	public LinkedHashMap<String, String> setHeaders(LinkedHashMap<String, String> data) {
 
 		LinkedHashMap<String, String> headersmap = new LinkedHashMap<String, String>();
-		String[] headers = data.get("headers").split(";");
+		String[] headers = data.get(ExcelColumnNameConstant.TESTHEADERS.toString()).split(";");
 		int headersSize = headers.length;
 		System.out.println("Total Size" + headersSize);
 		for (int i = 0; i < headersSize; i++) {
@@ -73,7 +74,8 @@ public class APIExecutorHelper {
 	 * 
 	 */
 	public String getUrl(LinkedHashMap<String, String> data) {
-		String url = DataUtilCommans.BASEURL + data.get("url") + data.get("parameters");
+		String url = DataUtilCommans.BASEURL + data.get(ExcelColumnNameConstant.TESTURL.toString())
+				+ data.get(ExcelColumnNameConstant.TESTPARAMETERS.toString());
 		return url;
 	}
 

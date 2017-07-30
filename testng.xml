@@ -2,17 +2,9 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="API Test">
 
-<test name="Download File From Google Drive">
+	<test name="Download File From Google Drive">
 		<classes>
-			<class name="com.framework.testcasesbase.testsuite.DownloadFileFromDriveAndSetBaseUrl"></class>
-		</classes>
-	</test> <!-- Test -->
-
-
-
-	<test name="Get all access token for different type of user.">
-		<classes>
-			<class name="com.framework.testsuite.TestCases"></class>
+			<class name="com.framework.testcasesbase.testsuite.ApiTestFactory"></class>
 		</classes>
 	</test> <!-- Test -->
 

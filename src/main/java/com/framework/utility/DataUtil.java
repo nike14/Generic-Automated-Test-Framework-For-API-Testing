@@ -3,16 +3,11 @@
  */
 package com.framework.utility;
 
-import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
-import java.util.List;
-
-import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.testng.annotations.DataProvider;
-
 import com.framework.commans.Commans.DataUtilCommans;
-import com.framework.constants.Constants;
+import com.framework.commans.Commans.FactoryHelperCommans;
 import com.framework.constants.Constants.DataUtilConstants;
 
 /**
@@ -28,19 +23,19 @@ public class DataUtil {
 	 */
 
 	@DataProvider(name = "getData")
-	public Object[][] getData(Method method) {
+	public Object[][] getData() {
 		Object[][] data = null;
 		try {
 			ExcelReader excelread = new ExcelReader();
-			String sheetName = method.getDeclaringClass().getSimpleName();
+			String sheetName = FactoryHelperCommans.sheetsName.get(DataUtilCommans.count);
+			DataUtilCommans.count++;
 
-			// Initialize rows variable and get number of rows.
-			int rows = 0;
-			while (!excelread.getCellData(sheetName, 0, rows).equals("")) {
-				rows++;
-			}
+			// get number of rows.
+			int rows = excelread.getLastRowNumber(sheetName);
+
 			// get number of columns.
 			int cols = excelread.getLastColNum(sheetName, 1);
+
 			// get count for Runmode=yes.
 			int count = runModeCount(excelread, sheetName, rows);
 

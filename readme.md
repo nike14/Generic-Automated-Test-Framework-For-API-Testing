@@ -13,30 +13,38 @@ API Framework that does not require you to write code for almost all APIS.
 ## Configuration
 
 * Clone repository.
+* For generating key from google place [Click here](https://developers.google.com/places/web-service/get-api-key) and click on **GET A KEY** button:![alt text](https://i.imgur.com/OATTSD6.png)
+* Go to src/test/resources/ExcelData
+* Open Excel **googleplace** sheet and modify $$$$$$$ from parameters column to above generated key.
+
+
+For more detail refer guidelines.
+
+## Optional Configuration[Google drive support]
+
 * Delete client_secret.json from src/main/resources.
 * Turn on the [Drive api](https://developers.google.com/drive/v2/web/quickstart/java) (Step 1 only)
 * Move client_secret.json to src/main/resources and give file name **client_secret.json**  
 * Go to src/test/resources/ExcelData
 * Upload excel file to your drive and open with google spreadsheet.
-* For generating key from google place [Click here](https://developers.google.com/places/web-service/get-api-key) and click on **GET A KEY** button.
-* Open Drive Excel and modify $$$$$$$ from parameters column to above generated key.
-* Copy **excel id** from spreadsheet URL e.g **1eXH2bB1KiQB7lB6zNq67gyiURbdsfGgsiwq0efqrqXc** from URL "https://docs.google.com/spreadsheets/d/1eXH2bB1KiQB7lB6zNq67gyiURbdsfGgsiwq0efqrqXc/edit#gid=391694237"
+* Copy **excel id**:![alt text](https://i.imgur.com/5pOTkAz.png from spreadsheet) 
 * Go to src/main/java/com/framework/constants >> Constants.java
 * Search EXCELFILEPATH variable and change to above **excel id** and save file. 
 * Modify/check your **Application Name** in com.framework.constants >> Constants.java >> APPLICATIONNAME(As per given in google drive)
 
-For more detail refer guidelines.
 
 ## Run
 
 * mvn clean compile test **or** Open testng.xml file and Run As TestNG Suite.
-* After running above command one new window will generate and select previously used email address.
+* If user do **Optional configuration** a new window will generate and select previously used email address.
 * Click on **Allow** button.
 
 ## Reports
 
 * Open Reports folder after running framework.
 * Report will generate for each TestFlow.
+
+![alt text](https://i.imgur.com/GQBHcIb.png)
 	
 ## Guidelines
 
@@ -53,6 +61,22 @@ TCID | RunMode | TFNameAndDesc | TCName
 2 | | | getAccessTokenForWMGJ|
 3 | No |Get To Be Paid Package| getToBePaidPackageGJLP |  
 
+![alt text](https://i.imgur.com/xu7480I.png)
+
+### Extract response value:
+
+Extract values from the response and use for the next test cases.
+
+Method and json path |
+---|
+**extractString**:$.responseData.X-Authorization-Token|
+**extractNumber**:$.responseData.packages[0].amount|
+**extractLong**:$.responseData.payment.lpTransaction.transactionDate |
+**extractBoolean**:$.status |
+**extractStringList**:$.responseData.payments[*].lpTransaction.status |
+
+![alt text](https://i.imgur.com/BTI53hg.png)
+
 ### Extract dynamic value for TestCases.
 
 Extract dynamic values for the below column:
@@ -65,13 +89,15 @@ Extract dynamic values for the below column:
 
 For Example
 
-* **URL**: /lppayment/#18.id#/
+* **URL**: /lppayment/#**sheet name.Test Id.path**#/    ------> **i.e** #googleplace.1.lng#
 * **Assert Response**: 
-	* #17.reconciliationStatus#,to_be_paid
-	* #17.reconciliationStatus#,#15.reconciliationStatus#**;**#17.reconciliationStatus#,to_be_paid (Compare more than 2 values separed by **;**)
+	* #googleplace.14.reconciliationStatus#,to_be_paid
+	* #googleplace.15.reconciliationStatus#,#googleplace.14.reconciliationStatus#**;**#googleplace.14.reconciliationStatus#,to_be_paid (Compare more than 2 values separated by **;**)
 * **Assert Response List**:
-	* @24.status@,waiting_for_clearance;#23.reconciliationStatus#,to_be_paid (Use @ @ means list replacement first in assert column than # # single value replacement)
+	* @googleplace.24.status@,waiting_for_clearance;#googleplace.23.reconciliationStatus#,to_be_paid (Use @ @ means list replacement always first in assert column than # # single value replacement)
 	
+![alt text](https://i.imgur.com/pyIR5eD.png)	
+
 ### Schema validation for response.
 
 * Add your schema under src/test/resources
@@ -79,17 +105,6 @@ For Example
 output |
 ---|
 accesstokensuccess.json|
-
-### Extract response value:
-
-Extract values from the response and use for the next test cases.
-
-Method and json path |
----|
-**extractString**:$.responseData.X-Authorization-Token|
-**extractNumber**:$.responseData.packages[0].amount|
-**extractLong**:$.responseData.payment.lpTransaction.transactionDate |
-**extractBoolean**:$.status |
 
 ####  Epoch Date for parameters:
 
@@ -108,4 +123,4 @@ Method and json path |
 
 For Example
 
-* **Parameters**: ?createdFrom=#0.startdatetoday#&createdTo=#0.enddatetoday#
+* **Parameters**: ?createdFrom=#epoch.0.startdatetoday#&createdTo=#epoch.0.enddatetoday#

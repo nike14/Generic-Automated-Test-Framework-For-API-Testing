@@ -6,9 +6,13 @@ package com.framework.restassured;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.util.LinkedHashMap;
+
 import org.apache.http.util.TextUtils;
+
 import com.framework.constants.Constants.ApiExecutorConstants;
+import com.framework.constants.Constants.ExcelColumnNameConstant;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 import io.restassured.RestAssured;
@@ -35,13 +39,13 @@ public class ApiExecutor {
 	public Response apiGet(LinkedHashMap<String, String> data, ExtentTest extentTest) {
 		String url = apiExecutorHelperObj.getUrl(data);
 		extentTest.log(LogStatus.INFO, "URL-->" + url);
-		extentTest.log(LogStatus.INFO, "Input json" + data.get("input json"));
+		extentTest.log(LogStatus.INFO, "Input json" + data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 		Response resp = null;
 		try {
 			RequestSpecification rs = given().contentType(ApiExecutorConstants.CONTENTTYPE.toString())
-					.body(data.get("input json"));
+					.body(data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 
-			if (!TextUtils.isEmpty(data.get("headers"))) {
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTHEADERS.toString()))) {
 				extentTest.log(LogStatus.INFO, "Headers-->" + apiExecutorHelperObj.setHeaders(data));
 				rs = rs.given().headers(apiExecutorHelperObj.setHeaders(data));
 			}
@@ -50,8 +54,10 @@ public class ApiExecutor {
 			extentTest.log(LogStatus.INFO, "Response" + resp.asString());
 			long executionTimeInMillis = resp.getTime();
 			apiExecutorHelperObj.printTestExecutionTime(executionTimeInMillis, extentTest);
-			if (!TextUtils.isEmpty(data.get("output"))) {
-				assertThat(resp.asString(), matchesJsonSchemaInClasspath(data.get("output")));
+
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString()))) {
+				assertThat(resp.asString(),
+						matchesJsonSchemaInClasspath(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString())));
 			}
 		} catch (Exception e) {
 			extentTest.log(LogStatus.FAIL, "Fail " + e.getMessage());
@@ -72,10 +78,10 @@ public class ApiExecutor {
 		Response resp = null;
 		try {
 			extentTest.log(LogStatus.INFO, "URL-->" + url);
-			extentTest.log(LogStatus.INFO, "Input json" + data.get("input json"));
+			extentTest.log(LogStatus.INFO, "Input json" + data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 			RequestSpecification rs = given().contentType(ApiExecutorConstants.CONTENTTYPE.toString())
-					.body(data.get("input json"));
-			if (!TextUtils.isEmpty(data.get("headers"))) {
+					.body(data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTHEADERS.toString()))) {
 				extentTest.log(LogStatus.INFO, "Headers-->" + apiExecutorHelperObj.setHeaders(data));
 				rs = rs.given().headers(apiExecutorHelperObj.setHeaders(data));
 			}
@@ -84,8 +90,10 @@ public class ApiExecutor {
 			extentTest.log(LogStatus.INFO, "Response" + resp.asString());
 			long executionTimeInMillis = resp.getTime();
 			apiExecutorHelperObj.printTestExecutionTime(executionTimeInMillis, extentTest);
-			if (!TextUtils.isEmpty(data.get("output"))) {
-				assertThat(resp.asString(), matchesJsonSchemaInClasspath(data.get("output")));
+
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString()))) {
+				assertThat(resp.asString(),
+						matchesJsonSchemaInClasspath(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString())));
 			}
 
 		} catch (Exception e) {
@@ -106,10 +114,10 @@ public class ApiExecutor {
 		extentTest.log(LogStatus.INFO, "URL-->" + url);
 		Response resp = null;
 		try {
-			extentTest.log(LogStatus.INFO, "Input json" + data.get("input json"));
+			extentTest.log(LogStatus.INFO, "Input json" + data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 			RequestSpecification rs = given().contentType(ApiExecutorConstants.CONTENTTYPE.toString())
-					.body(data.get("input json"));
-			if (!TextUtils.isEmpty(data.get("headers"))) {
+					.body(data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTHEADERS.toString()))) {
 				extentTest.log(LogStatus.INFO, "Headers-->" + apiExecutorHelperObj.setHeaders(data));
 				rs = rs.given().headers(apiExecutorHelperObj.setHeaders(data));
 			}
@@ -117,8 +125,10 @@ public class ApiExecutor {
 			extentTest.log(LogStatus.INFO, "Response" + resp.asString());
 			long executionTimeInMillis = resp.getTime();
 			apiExecutorHelperObj.printTestExecutionTime(executionTimeInMillis, extentTest);
-			if (!TextUtils.isEmpty(data.get("output"))) {
-				assertThat(resp.asString(), matchesJsonSchemaInClasspath(data.get("output")));
+
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString()))) {
+				assertThat(resp.asString(),
+						matchesJsonSchemaInClasspath(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString())));
 			}
 
 		} catch (Exception e) {
@@ -139,10 +149,10 @@ public class ApiExecutor {
 		extentTest.log(LogStatus.INFO, "URL-->" + url);
 		Response resp = null;
 		try {
-			extentTest.log(LogStatus.INFO, "Input json" + data.get("input json"));
+			extentTest.log(LogStatus.INFO, "Input json" + data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 			RequestSpecification rs = given().contentType(ApiExecutorConstants.CONTENTTYPE.toString())
-					.body(data.get("input json"));
-			if (!TextUtils.isEmpty(data.get("headers"))) {
+					.body(data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTHEADERS.toString()))) {
 				extentTest.log(LogStatus.INFO, "Headers-->" + apiExecutorHelperObj.setHeaders(data));
 				rs = rs.given().headers(apiExecutorHelperObj.setHeaders(data));
 			}
@@ -150,8 +160,10 @@ public class ApiExecutor {
 			extentTest.log(LogStatus.INFO, "Response" + resp.asString());
 			long executionTimeInMillis = resp.getTime();
 			apiExecutorHelperObj.printTestExecutionTime(executionTimeInMillis, extentTest);
-			if (!TextUtils.isEmpty(data.get("output"))) {
-				assertThat(resp.asString(), matchesJsonSchemaInClasspath(data.get("output")));
+
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString()))) {
+				assertThat(resp.asString(),
+						matchesJsonSchemaInClasspath(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString())));
 			}
 
 		} catch (Exception e) {
@@ -161,4 +173,32 @@ public class ApiExecutor {
 		return resp;
 	}
 
+	public Response apiPatch(LinkedHashMap<String, String> data, ExtentTest extentTest) {
+		String url = apiExecutorHelperObj.getUrl(data);
+		extentTest.log(LogStatus.INFO, "URL-->" + url);
+		Response resp = null;
+		try {
+			extentTest.log(LogStatus.INFO, "Input json" + data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
+			RequestSpecification rs = given().contentType(ApiExecutorConstants.CONTENTTYPE.toString())
+					.body(data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTHEADERS.toString()))) {
+				extentTest.log(LogStatus.INFO, "Headers-->" + apiExecutorHelperObj.setHeaders(data));
+				rs = rs.given().headers(apiExecutorHelperObj.setHeaders(data));
+			}
+			resp = rs.when().patch(url).then().extract().response();
+			extentTest.log(LogStatus.INFO, "Response" + resp.asString());
+			long executionTimeInMillis = resp.getTime();
+			apiExecutorHelperObj.printTestExecutionTime(executionTimeInMillis, extentTest);
+
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString()))) {
+				assertThat(resp.asString(),
+						matchesJsonSchemaInClasspath(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString())));
+			}
+
+		} catch (Exception e) {
+			extentTest.log(LogStatus.FAIL, "Fail " + e.getMessage());
+			org.testng.Assert.fail("*******************************apiPatch:" + e.getMessage());
+		}
+		return resp;
+	}
 }

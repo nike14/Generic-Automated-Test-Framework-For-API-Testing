@@ -54,88 +54,6 @@ public class ExcelReader {
 		}
 	}
 
-	/*
-	 * Returns a run mode map for Test suite and Test Cases.
-	 * 
-	 */
-
-	public void isExecutable() {
-		try {
-
-			// Return Test Cases sheet from the XLSX workbook
-			sheet = workbook.getSheet(Constants.TESTFLOW.toString());
-			testFlowsMap = getTestCaseAndTestSuiteMap(Constants.TESTFLOW.toString(), Constants.TFNAME.toString(),
-					Constants.TSNAME.toString(), testFlowsMap);
-			sheet = workbook.getSheet(Constants.TESTSUITE.toString());
-			testSuiteMap = getTestCaseAndTestSuiteMap(Constants.TESTSUITE.toString(), Constants.TSNAME.toString(),
-					Constants.RUNMODE.toString(), testSuiteMap);
-			for (String value : testFlowsMap.keySet()) {
-				for (String key : testSuiteMap.keySet()) {
-					if (testFlowsMap.get(value).equalsIgnoreCase(key))
-						Constants.testDataMap.put(value, testFlowsMap.get(value));
-				}
-			}
-			System.out.println("-----------" + Constants.testDataMap);
-			workbook.close();
-			fis.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	/*
-	 * Create a testCaseMap and testSuiteMap for run mode
-	 * 
-	 */
-
-	public LinkedHashMap<String, String> getTestCaseAndTestSuiteMap(String testcase, String columnNameFirst,
-			String columnNameSecond, LinkedHashMap<String, String> mapTestCaseAndTestSuite) {
-		try {
-
-			int rows = getRowCount(testcase);
-			for (int rNum = 2; rNum <= rows; rNum++) {
-				StringBuffer tsid = new StringBuffer(getCellData(testcase, columnNameFirst, rNum));
-				StringBuffer tcid = new StringBuffer(getCellData(testcase, columnNameSecond, rNum));
-				if (testcase.equalsIgnoreCase(Constants.TESTFLOW.toString())) {
-					String runMode = getCellData(testcase, Constants.RUNMODE.toString(), rNum);
-					if (runMode.equalsIgnoreCase(Constants.RUNMODEVALUE.toString()))
-						mapTestCaseAndTestSuite.put(tsid.toString(), tcid.toString());
-				} else {
-					if (tcid.toString().equalsIgnoreCase(Constants.RUNMODEVALUE.toString())) {
-						mapTestCaseAndTestSuite.put(tsid.toString(), tcid.toString());
-					}
-				}
-				System.out.println("--------------" + tsid + "----------" + tcid);
-			}
-			System.out.println("--------------map-----" + mapTestCaseAndTestSuite);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return mapTestCaseAndTestSuite;
-
-	}
-
-	/*
-	 * Returns the row count in a sheet.
-	 * 
-	 */
-
-	public int getRowCount(String sheetName) {
-		int index = workbook.getSheetIndex(sheetName);
-		if (index == -1)
-			return 0;
-		else {
-			sheet = workbook.getSheetAt(index);
-			int number = sheet.getLastRowNum() + 1;
-			return number;
-		}
-
-	}
 
 	/*
 	 * Returns the data from a cell.
@@ -229,35 +147,6 @@ public class ExcelReader {
 		}
 	}
 
-	public List<String> getFlowName(String sheetName) {
-		List<String> flowName = new ArrayList<String>();
-
-		int index = workbook.getSheetIndex(sheetName);
-
-		if (index == -1)
-			return flowName;
-
-		Sheet sheet = workbook.getSheetAt(index);
-
-		for (Row row : sheet) { // For each Row.
-
-			Cell cell = row.getCell(1); // Get the Cell at the Index / Colum you
-										// want.
-			if (!cell.toString().equalsIgnoreCase(Constants.TFNAME.toString()) && !TextUtils.isEmpty(cell.toString()))
-				flowName.add(cell.toString());
-
-		}
-
-		try {
-			workbook.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return flowName;
-	}
-
 	/*
 	 * Returns last row number.
 	 */
@@ -285,6 +174,14 @@ public class ExcelReader {
 
 		return sheet.getRow(number).getLastCellNum();
 
+	}
+	
+	public int getLastRowNumber(String sheetName){
+		int rows = 0;
+		while (!getCellData(sheetName, 0, rows).equals("")) {
+			rows++;
+		}
+		return rows;
 	}
 
 }

@@ -9,6 +9,10 @@ import org.apache.http.util.TextUtils;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
+
+import com.framework.commans.Commans.DataUtilCommans;
+import com.framework.commans.Commans.FactoryHelperCommans;
+import com.framework.constants.Constants.ExcelColumnNameConstant;
 import com.framework.utility.DataUtil;
 import com.framework.utility.ExtentManager;
 import com.framework.utility.GetDynamicData;
@@ -23,30 +27,35 @@ import com.relevantcodes.extentreports.LogStatus;
  */
 public class TestCases {
 	ExtentManager extentReportObj = new ExtentManager();
-	public ExtentReports extentReport = extentReportObj.getInstance("API Report");
-	public ExtentTest extentTest;
 	GetDynamicData getDynamicData = new GetDynamicData();
 	RestAssuredHelper restAssuredHelperObj = new RestAssuredHelper();
-	/*
-	 * 
-	 * Get access token for ops user.
-	 */
+	public ExtentReports extentReport;
+	public ExtentTest extentTest;
 
-	@Test(dataProvider = "getData", dataProviderClass = DataUtil.class, priority = 1)
+	
+	@Test(priority = 1, dataProvider = "getData", dataProviderClass = DataUtil.class)
 	public void testMethod(LinkedHashMap<String, String> data) {
+		String sheetName=FactoryHelperCommans.sheetsName.get(DataUtilCommans.count - 1).toLowerCase();
+		extentReport = extentReportObj
+				.getInstance(sheetName);
 		try {
-			if (!TextUtils.isEmpty(data.get("tfnameanddesc"))) {
-				extentTest = extentReport.startTest(data.get("tfnameanddesc"));
+			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTFLOWNAME.toString()))) {
+				extentTest = extentReport.startTest(data.get(ExcelColumnNameConstant.TESTFLOWNAME.toString()));
 			}
-			extentTest.log(LogStatus.INFO, "Test Case Name:->>" + data.get("tcname"));
-			getDynamicData.getDynamicValues(data, extentTest);
+			extentTest.log(LogStatus.INFO,
+					"Test Case Name:->>" + data.get(ExcelColumnNameConstant.TESTCASENAME.toString()));
+			getDynamicData.getDynamicValues(data, extentTest,sheetName);
 			getDynamicData.assertSingleDynamicValue(data, extentTest);
 		} catch (AssertionError e) {
-			extentTest.log(LogStatus.FAIL, "Fail " + data.get("tcname") + e.getMessage());
-			org.testng.Assert.fail("Fail for" + data.get("tcname") + e.getMessage());
+			extentTest.log(LogStatus.FAIL,
+					"Fail " + data.get(ExcelColumnNameConstant.TESTCASENAME.toString()) + e.getMessage());
+			org.testng.Assert
+					.fail("Fail for" + data.get(ExcelColumnNameConstant.TESTCASENAME.toString()) + e.getMessage());
 		} catch (Exception e) {
-			extentTest.log(LogStatus.FAIL, "Fail " + data.get("tcname") + e.getMessage());
-			org.testng.Assert.fail("Fail for" + data.get("tcname") + e.getMessage());
+			extentTest.log(LogStatus.FAIL,
+					"Fail " + data.get(ExcelColumnNameConstant.TESTCASENAME.toString()) + e.getMessage());
+			org.testng.Assert
+					.fail("Fail for" + data.get(ExcelColumnNameConstant.TESTCASENAME.toString()) + e.getMessage());
 		}
 	}
 

@@ -45,6 +45,7 @@ public class InMemoryDatabaseHelper {
 			stmt = InMemoryDatabaseHelperCommans.connectionObj.createStatement();
 			result = stmt.executeUpdate("CREATE TABLE " + InMemoryDatabaseHelperConstant.TABLENAME.toString() + "("
 					+ InMemoryDatabaseHelperConstant.TESTCASEID.toString() + " int,"
+					+ InMemoryDatabaseHelperConstant.SHEETNAME.toString() + " VARCHAR(50),"
 					+ InMemoryDatabaseHelperConstant.PATHVALUE.toString() + " VARCHAR(50),"
 					+ InMemoryDatabaseHelperConstant.RESPONSEVALUE.toString() + " VARCHAR(1000) NOT NULL);");
 
@@ -57,10 +58,10 @@ public class InMemoryDatabaseHelper {
 	/*
 	 * Create data to created table.
 	 */
-	public void createData(String testCaseName, String path, String responseValue, String tableName) {
+	public void createData(String testCaseName, String sheetName,String path, String responseValue, String tableName) {
 		try {
 			stmt = InMemoryDatabaseHelperCommans.connectionObj.createStatement();
-			result = stmt.executeUpdate("INSERT INTO " + tableName + " VALUES ('" + testCaseName + "','" + path + "','"
+			result = stmt.executeUpdate("INSERT INTO " + tableName + " VALUES ('" + testCaseName + "','" + sheetName + "','" + path + "','"
 					+ responseValue + "')");
 		} catch (Exception e) {
 			System.out.println("Exception in create data to Database:" + e);
@@ -70,7 +71,7 @@ public class InMemoryDatabaseHelper {
 	/*
 	 * Get data from database.
 	 */
-	public String getDataFromDataBase(String testCaseid, String pathValue) throws SQLException {
+	public String getDataFromDataBase(String sheetName,String testCaseid, String pathValue) throws SQLException {
 		ResultSet resultFromTable = null;
 		try {
 			stmt = InMemoryDatabaseHelperCommans.connectionObj.createStatement();
@@ -79,6 +80,7 @@ public class InMemoryDatabaseHelper {
 					+ InMemoryDatabaseHelperConstant.RESPONSEVALUE.toString() + " from "
 					+ InMemoryDatabaseHelperConstant.TABLENAME.toString() + " where "
 					+ InMemoryDatabaseHelperConstant.TESTCASEID.toString() + "='" + testCaseid + "'  AND "
+					+ InMemoryDatabaseHelperConstant.SHEETNAME.toString() + "='" + sheetName + "'  AND "
 					+ InMemoryDatabaseHelperConstant.PATHVALUE.toString() + "='" + pathValue + "'");
 
 			while (resultFromTable.next()) {
