@@ -35,11 +35,11 @@ For more detail refer guidelines.
 
 ## Operators
 
-Operator | Example | Description
---- | --- | ---
- #  # |#Sheet Name.Test Id.Path# | Single dynamic value replacement.
- @  @ |@Sheet Name.Test Id.Path[0]@ | Single dynamic value replacement from dynamic list.
- @  @ |@Sheet Name.Test Id.Path@ | List value replacement for **Assert response** only.
+Number|Operator | Example | Description
+---|--- | --- | ---
+ 1| #  # |#Sheet Name.Test Id.Path# | Single dynamic value replacement.
+ 2| @  @ |@Sheet Name.Test Id.Path[0]@ | Single dynamic value replacement from dynamic list.
+ 3|  @  @ |@Sheet Name.Test Id.Path@ | List value replacement for **Assert response** only.
  
 	
 ## Guidelines
@@ -60,14 +60,14 @@ Test Id | Test Mode | Test Flow Name | Test Case Name
 
 Extract values from the "**API response**" and use for the next **"Test Cases or Flows**.
 
-Function |Test Method and json path |Result
----|---|---
-extractString|**extractString**:$.responseData.X-Authorization-Token|The X-Authorization-Token Value
-extractNumber|**extractNumber**:$.responseData.packages[0].amount|Amount First From Packages. 
-extractLong|**extractLong**:$.responseData.payment.lpTransaction.transactionDate |The Transaction Date Value(Epoch form)
-extractBoolean|**extractBoolean**:$.status |The Status Value
-extractStringList|**extractStringList**:$.responseData.payments[*].lpTransaction.status |All Staus from Payments.
-extractLongList |**extractLongList**:$.responseData[*].createdOn|All Created On Dates(Epoch form)
+Number|Function |Test Method and json path |Result
+---|---|---|---
+1|extractString|**extractString**:$.responseData.X-Authorization-Token|The X-Authorization-Token Value
+2|extractNumber|**extractNumber**:$.responseData.packages[0].amount|Amount First From Packages. 
+3|extractLong|**extractLong**:$.responseData.payment.lpTransaction.transactionDate |The Transaction Date |Value(Epoch form)
+4|extractBoolean|**extractBoolean**:$.status |The Status Value
+5|extractStringList|**extractStringList**:$.responseData.payments[*].lpTransaction.status |All Staus from Payments.
+6|extractLongList |**extractLongList**:$.responseData[*].createdOn|All Created On Dates(Epoch form)
 
 ![alt text](https://i.imgur.com/BTI53hg.png)
 
@@ -83,11 +83,11 @@ Extract dynamic values use for **dynamic value replacement** from the "**API res
 
 For Example
 
-Column Name | Syntax | Example | Result
----|---|---|---
-All above column|**#Sheet Name.Test Id.path#**|#googleplace.1.lng#| Get 1st Test Id Value from googleplace sheet. 
-All above column|**@Sheet Name.Test Id.Path[0]@**|@manifest.14.id[0]@|Get 1st Value from List of 14 Test case.
-Test Assert Response|**@Sheet Name.Test Id.Path@**|@googleplace.24.status@ |Get All vallue from List of 24 Test Case.
+Number|Column Name | Syntax | Example | Result
+---|---|---|---|---
+1|All above column|**#Sheet Name.Test Id.path#**|#googleplace.1.lng#| Get 1st Test Id Value from googleplace sheet. 
+2|All above column|**@Sheet Name.Test Id.Path[0]@**|@manifest.14.id[0]@|Get 1st Value from List of 14 Test case.
+3|Test Assert Response|**@Sheet Name.Test Id.Path@**|@googleplace.24.status@ |Get All vallue from List of 24 Test Case.
 
 **Compare more than 2** value in Test Assert Response use "**;**" 
 
