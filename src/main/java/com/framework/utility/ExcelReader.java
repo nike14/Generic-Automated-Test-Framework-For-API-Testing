@@ -4,14 +4,11 @@
 package com.framework.utility;
 
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 
-import org.apache.http.util.TextUtils;
+
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -132,9 +129,14 @@ public class ExcelReader {
 
 			if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
 				return cell.getStringCellValue();
-			} else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC || cell.getCellType() == Cell.CELL_TYPE_FORMULA) {
-
+			} else if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+				DataFormatter fmt = new DataFormatter();
 				// String cellText = String.valueOf(cell.getNumericCellValue());
+				String cellText = String.valueOf(fmt.formatCellValue(cell));
+				// cell.setCellType(Cell.CELL_TYPE_STRING);
+				return cellText;
+			} else if (cell.getCellType() == Cell.CELL_TYPE_FORMULA) {
+				System.out.println(cell.getStringCellValue().trim());
 				return cell.getStringCellValue().trim();
 			} else if (cell.getCellType() == Cell.CELL_TYPE_BLANK)
 				return "";

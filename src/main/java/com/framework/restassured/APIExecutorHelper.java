@@ -4,7 +4,6 @@
 package com.framework.restassured;
 
 import java.util.LinkedHashMap;
-
 import com.framework.commans.Commans.DataUtilCommans;
 import com.framework.constants.Constants.ExcelColumnNameConstant;
 import com.relevantcodes.extentreports.ExtentTest;
@@ -20,7 +19,7 @@ public class APIExecutorHelper {
 	/*
 	 * setHeaders methods returns the header map for all test cases.
 	 */
-	public LinkedHashMap<String, String> setHeaders(LinkedHashMap<String, String> data) {
+	public static LinkedHashMap<String, String> setHeaders(LinkedHashMap<String, String> data) {
 
 		LinkedHashMap<String, String> headersmap = new LinkedHashMap<String, String>();
 		String[] headers = data.get(ExcelColumnNameConstant.TESTHEADERS.toString()).split(";");
@@ -73,10 +72,21 @@ public class APIExecutorHelper {
 	 * Create API URL as per selected Environment.
 	 * 
 	 */
-	public String getUrl(LinkedHashMap<String, String> data) {
+	public static String getUrl(LinkedHashMap<String, String> data) {
 		String url = DataUtilCommans.BASEURL + data.get(ExcelColumnNameConstant.TESTURL.toString())
 				+ data.get(ExcelColumnNameConstant.TESTPARAMETERS.toString());
 		return url;
+	}
+
+	public static boolean isDynamicValuePresent(String url, LinkedHashMap<String, String> data) {
+		boolean flag = false;
+		if (url.contains("#") || setHeaders(data).toString().contains("#")
+				|| data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()).contains("#") || url.contains("@")
+				|| setHeaders(data).toString().contains("@")
+				|| data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()).contains("@")) {
+			flag = true;
+		}
+		return flag;
 	}
 
 }

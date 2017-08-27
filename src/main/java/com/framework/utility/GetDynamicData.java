@@ -3,7 +3,9 @@
  */
 package com.framework.utility;
 
+import java.sql.SQLException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.http.util.TextUtils;
@@ -25,13 +27,18 @@ public class GetDynamicData {
 	/*
 	 * getDyanmicsValues call the helper method for replacing dynamic values.
 	 */
-	public void getDynamicValues(LinkedHashMap<String, String> data, ExtentTest extentTest,String sheetName) {
+	public void getDynamicValues(LinkedHashMap<String, String> data, ExtentTest extentTest, String sheetName) {
 		getSingleDynamicValue(ExcelColumnNameConstant.TESTURL.toString(), extentTest, data);
 		getSingleDynamicValue(ExcelColumnNameConstant.TESTINPUTJSON.toString(), extentTest, data);
 		getSingleDynamicValue(ExcelColumnNameConstant.TESTHEADERS.toString(), extentTest, data);
 		getSingleDynamicValue(ExcelColumnNameConstant.TESTPARAMETERS.toString(), extentTest, data);
 		getSingleDynamicValue(ExcelColumnNameConstant.TESTMETHODANDJSONPATH.toString(), extentTest, data);
-		restAssuredHelperObj.apiExecutorHelper(data, extentTest,sheetName);
+		getListDynamicValue(ExcelColumnNameConstant.TESTURL.toString(), extentTest, data);
+		getListDynamicValue(ExcelColumnNameConstant.TESTINPUTJSON.toString(), extentTest, data);
+		getListDynamicValue(ExcelColumnNameConstant.TESTHEADERS.toString(), extentTest, data);
+		getListDynamicValue(ExcelColumnNameConstant.TESTPARAMETERS.toString(), extentTest, data);
+		getListDynamicValue(ExcelColumnNameConstant.TESTMETHODANDJSONPATH.toString(), extentTest, data);
+		restAssuredHelperObj.apiExecutorHelper(data, extentTest, sheetName);
 	}
 
 	/*
@@ -53,10 +60,12 @@ public class GetDynamicData {
 	 */
 	public void getListDynamicValue(String value, ExtentTest extentTest, LinkedHashMap<String, String> data) {
 		try {
-			if (data.get(value).contains("@")) {
-				extractListValue(value, extentTest, data);
+			if (data.get(value).contains("@")
+					&& value.equalsIgnoreCase(ExcelColumnNameConstant.TESTASSERTRESPONSE.toString())) {
+				extractListValueForAssert(value, extentTest, data);
 				removeListValues(value, data, extentTest);
-
+			} else if (data.get(value).contains("@")) {
+				extractListValue(value, extentTest, data);
 			}
 
 		} catch (Exception e) {
@@ -79,7 +88,7 @@ public class GetDynamicData {
 
 			}
 		} catch (Exception e) {
-			extentTest.log(LogStatus.ERROR, "Exception for extractSingleValue" + e);
+			extentTest.log(LogStatus.ERROR, "Exception for assertSingleDynamicValue" + e);
 		}
 	}
 
@@ -96,23 +105,25 @@ public class GetDynamicData {
 				String dynamicValue = matcher.group();
 				String replaceValueFromDynamicValue = matcher.group().replace("#", "");
 				String[] splitDynamicValue = replaceValueFromDynamicValue.split("\\.");
-				String sheetName=splitDynamicValue[0].toLowerCase();
+				String sheetName = splitDynamicValue[0].toLowerCase();
 				String testCaseid = splitDynamicValue[1];
 				String pathValue = splitDynamicValue[2].toLowerCase();
-				System.out.println("sheetName"+sheetName+"id--" + testCaseid + "  value--" + pathValue);
-				String dataBaseValue = inMemoryDatabasehelperObj.getDataFromDataBase(sheetName,testCaseid, pathValue);
+				System.out.println("sheetName" + sheetName + "id--" + testCaseid + "  value--" + pathValue);
+				String dataBaseValue = inMemoryDatabasehelperObj.getDataFromDataBase(sheetName, testCaseid, pathValue);
 				data.put(value, data.get(value).replace(dynamicValue, dataBaseValue));
 			}
 
+		} catch (SQLException e) {
+			extentTest.log(LogStatus.SKIP, "Row Empty for :" + data.get(value) + "  -------------" + e);
 		} catch (Exception e) {
-			extentTest.log(LogStatus.ERROR, "Exception for extractSingleValue" + e);
+			extentTest.log(LogStatus.ERROR, "Exception for extractSingleValue" + data.get(value) + "-----" + e);
 		}
 	}
 
 	/*
 	 * extractListValue Replace dynamic values from data base.
 	 */
-	public void extractListValue(String value, ExtentTest extentTest, LinkedHashMap<String, String> data) {
+	public void extractListValueForAssert(String value, ExtentTest extentTest, LinkedHashMap<String, String> data) {
 		try {
 			String regex = "\\@[a-z|A-Z|0-9|\\.|\\-]+\\@";
 			Pattern pattern = Pattern.compile(regex);
@@ -122,11 +133,11 @@ public class GetDynamicData {
 				String dynamicValue = matcher.group();
 				String replaceValueFromDynamicValue = matcher.group().replace("@", "");
 				String[] splitDynamicValue = replaceValueFromDynamicValue.split("\\.");
-				String sheetName=splitDynamicValue[0].toLowerCase();
+				String sheetName = splitDynamicValue[0].toLowerCase();
 				String testCaseid = splitDynamicValue[1];
 				String pathValue = splitDynamicValue[2].toLowerCase();
-				System.out.println("sheetName--"+sheetName+"id--" + testCaseid + "  value--" + pathValue);
-				String dataBaseValue = inMemoryDatabasehelperObj.getDataFromDataBase(sheetName,testCaseid, pathValue);
+				System.out.println("sheetName--" + sheetName + "id--" + testCaseid + "  value--" + pathValue);
+				String dataBaseValue = inMemoryDatabasehelperObj.getDataFromDataBase(sheetName, testCaseid, pathValue);
 				if (!TextUtils.isEmpty(dataBaseValue)) {
 					String[] splitDataBaseValue = dataBaseValue.split("\\,");
 					System.out.println(splitDataBaseValue.length);
@@ -147,6 +158,8 @@ public class GetDynamicData {
 				count++;
 			}
 
+		} catch (SQLException e) {
+			extentTest.log(LogStatus.SKIP, "Row Empty for :" + data.get(value) + "  -------------" + e);
 		} catch (Exception e) {
 			extentTest.log(LogStatus.ERROR, "Exception for extractListValue" + e);
 		}
@@ -158,7 +171,8 @@ public class GetDynamicData {
 	public void assertSingleValueStaticData(LinkedHashMap<String, String> data, ExtentTest extentTest) {
 		try {
 			String assertText = data.get(ExcelColumnNameConstant.TESTASSERTRESPONSE.toString());
-			assertMethod(assertText, extentTest);
+			if (!assertText.contains("#"))
+				assertMethod(assertText, extentTest);
 		} catch (Exception e) {
 			extentTest.log(LogStatus.ERROR, "Exception for assertmethod" + e);
 		}
@@ -208,6 +222,40 @@ public class GetDynamicData {
 			String values = matcher.group();
 			data.put(value, data.get(value).replace(values, ""));
 			System.out.println(data.get(value));
+		}
+	}
+
+	public void extractListValue(String value, ExtentTest extentTest, LinkedHashMap<String, String> data) {
+		int positionValue = 0;
+		try {
+			String regex = "\\@[a-z|A-Z|0-9|\\.|\\[|\\]|\\-|\\_]+\\@";
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(data.get(value));
+			while (matcher.find()) {
+				String dynamicValue = matcher.group();
+				String replaceUnwantedValue = matcher.group().replace("@", "");
+				String replaceFirstAngleBracket = replaceUnwantedValue.replace("[", " ");
+				String replaceSecondAnglrBracket = replaceFirstAngleBracket.replace("]", "");
+				String[] splitDynamicValue = replaceSecondAnglrBracket.split("\\.");
+				String sheetName = splitDynamicValue[0].toLowerCase();
+				String testCaseid = splitDynamicValue[1];
+				String path = splitDynamicValue[2].toLowerCase();
+				String[] splitPathValue = path.split(" ");
+				String pathValue = splitPathValue[0].toLowerCase();
+				positionValue = Integer.parseInt(splitPathValue[1]);
+				System.out.println("sheetName" + sheetName + "id--" + testCaseid + "  value--" + pathValue);
+				String dataBaseValue = inMemoryDatabasehelperObj.getDataFromDataBase(sheetName, testCaseid, pathValue);
+				String[] dataBaseResultList = dataBaseValue.split("\\,");
+				String finalValue = dataBaseResultList[positionValue];
+				data.put(value, data.get(value).replace(dynamicValue, finalValue));
+			}
+
+		} catch (SQLException e) {
+			extentTest.log(LogStatus.SKIP, "Row Empty for :" + data.get(value) + "  -------------" + e);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			extentTest.log(LogStatus.SKIP, "Empty for :--" + positionValue+"--" + e);
+		} catch (Exception e) {
+			extentTest.log(LogStatus.ERROR, "Exception for extractSingleValue" + data.get(value) + "-----" + e);
 		}
 	}
 

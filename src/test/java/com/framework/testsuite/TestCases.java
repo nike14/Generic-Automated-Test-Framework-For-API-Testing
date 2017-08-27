@@ -32,19 +32,17 @@ public class TestCases {
 	public ExtentReports extentReport;
 	public ExtentTest extentTest;
 
-	
 	@Test(priority = 1, dataProvider = "getData", dataProviderClass = DataUtil.class)
 	public void testMethod(LinkedHashMap<String, String> data) {
-		String sheetName=FactoryHelperCommans.sheetsName.get(DataUtilCommans.count - 1).toLowerCase();
-		extentReport = extentReportObj
-				.getInstance(sheetName);
+		String sheetName = FactoryHelperCommans.sheetsName.get(DataUtilCommans.count - 1).toLowerCase();
+		extentReport = extentReportObj.getInstance(sheetName);
 		try {
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTFLOWNAME.toString()))) {
 				extentTest = extentReport.startTest(data.get(ExcelColumnNameConstant.TESTFLOWNAME.toString()));
 			}
 			extentTest.log(LogStatus.INFO,
 					"Test Case Name:->>" + data.get(ExcelColumnNameConstant.TESTCASENAME.toString()));
-			getDynamicData.getDynamicValues(data, extentTest,sheetName);
+			getDynamicData.getDynamicValues(data, extentTest, sheetName);
 			getDynamicData.assertSingleDynamicValue(data, extentTest);
 		} catch (AssertionError e) {
 			extentTest.log(LogStatus.FAIL,

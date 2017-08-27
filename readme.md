@@ -10,13 +10,13 @@ API Framework that does not require you to write code for almost all APIS.
 * Java 1.8
 * Install maven.
 
-## Configuration
+## Getting Started
 
 * Clone repository.
-* For generating key from google place [Click here](https://developers.google.com/places/web-service/get-api-key) and click on **GET A KEY** button:![alt text](https://i.imgur.com/OATTSD6.png)
+* For running existing example(Excel sheet) follow below steps.
+* Generate key from google place [Click here](https://developers.google.com/places/web-service/get-api-key) and click on **GET A KEY** button:![alt text](https://i.imgur.com/OATTSD6.png)
 * Go to src/test/resources/ExcelData
 * Open Excel **googleplace** sheet and modify $$$$$$$ from parameters column to above generated key.
-
 
 For more detail refer guidelines.
 
@@ -33,23 +33,16 @@ For more detail refer guidelines.
 * Modify/check your **Application Name** in com.framework.constants >> Constants.java >> APPLICATIONNAME(As per given in google drive)
 
 
-## Run
+## Operators
 
-* mvn clean compile test **or** Open testng.xml file and Run As TestNG Suite.
-* If user do **Optional configuration** a new window will generate and select previously used email address.
-* Click on **Allow** button.
-
-## Reports
-
-* Open Reports folder after running framework.
-* Report will generate for each TestFlow.
-
-![alt text](https://i.imgur.com/GQBHcIb.png)
+Operator | Example | Description
+--- | --- | ---
+ #  # |#Sheet Name.Test Id.Path# | Single dynamic value replacement.
+ @  @ |@Sheet Name.Test Id.Path[0]@ | Single dynamic value replacement from dynamic list.
+ @  @ |@Sheet Name.Test Id.Path@ | List value replacement for **Assert response** only.
+ 
 	
 ## Guidelines
-
-* #sheetName.1.id# -> Use for single value replacement.
-* @sheetName.1.id@ -> Use for List replacement for only assert response.
 
 ### Run mode for TestFlow: 
 
@@ -65,21 +58,22 @@ Test Id | Test Mode | Test Flow Name | Test Case Name
 
 ### Extract response value:
 
-Extract values from the response and use for the next test cases.
+Extract values from the "**API response**" and use for the next **"Test Cases or Flows**.
 
-Test Method and json path |
----|
-**extractString**:$.responseData.X-Authorization-Token|
-**extractNumber**:$.responseData.packages[0].amount|
-**extractLong**:$.responseData.payment.lpTransaction.transactionDate |
-**extractBoolean**:$.status |
-**extractStringList**:$.responseData.payments[*].lpTransaction.status |
+Function |Test Method and json path |Result
+---|---|---
+extractString|**extractString**:$.responseData.X-Authorization-Token|The X-Authorization-Token Value
+extractNumber|**extractNumber**:$.responseData.packages[0].amount|Amount First From Packages. 
+extractLong|**extractLong**:$.responseData.payment.lpTransaction.transactionDate |The Transaction Date Value(Epoch form)
+extractBoolean|**extractBoolean**:$.status |The Status Value
+extractStringList|**extractStringList**:$.responseData.payments[*].lpTransaction.status |All Staus from Payments.
+extractLongList |**extractLongList**:$.responseData[*].createdOn|All Created On Dates(Epoch form)
 
 ![alt text](https://i.imgur.com/BTI53hg.png)
 
 ### Extract dynamic value for TestCases.
 
-Extract dynamic values for the below column:
+Extract dynamic values use for **dynamic value replacement** from the "**API response**" for the below column:
 
 * Test Url
 * Test Input Json
@@ -89,12 +83,17 @@ Extract dynamic values for the below column:
 
 For Example
 
-* **Test Url**: /lppayment/#**sheetName.Test Id.path**#/    ------> **i.e** #googleplace.1.lng#
-* **Test Assert Response**: 
-	* #googleplace.14.reconciliationStatus#,to_be_paid
-	* #googleplace.15.reconciliationStatus#,#googleplace.14.reconciliationStatus#**;**#googleplace.14.reconciliationStatus#,to_be_paid (Compare more than 2 values separated by **;**)
-* **Test Assert Response List**:
-	* @googleplace.24.status@,waiting_for_clearance;#googleplace.23.reconciliationStatus#,to_be_paid (Use @ @ means list replacement always first in assert column than # # single value replacement)
+Column Name | Syntax | Example | Result
+---|---|---|---
+All above column|**#Sheet Name.Test Id.path#**|#googleplace.1.lng#| Get 1st Test Id Value from googleplace sheet. 
+All above column|**@Sheet Name.Test Id.Path[0]@**|@manifest.14.id[0]@|Get 1st Value from List of 14 Test case.
+Test Assert Response|**@Sheet Name.Test Id.Path@**|@googleplace.24.status@ |Get All vallue from List of 24 Test Case.
+
+**Compare more than 2** value in Test Assert Response use "**;**" 
+
+For e.g
+ 
+googleplace.15.reconciliationStatus#,#googleplace.14.reconciliationStatus#**;**#googleplace.14.reconciliationStatus#,to_be_paid
 	
 ![alt text](https://i.imgur.com/pyIR5eD.png)	
 
@@ -124,3 +123,22 @@ accesstokensuccess.json|
 For Example
 
 * **Test Parameters**: ?createdFrom=#epoch.0.startdatetoday#&createdTo=#epoch.0.enddatetoday#
+
+## Run
+
+* mvn clean compile test **or** Open testng.xml file and Run As TestNG Suite.
+* If user do **Optional configuration** a new window will generate and select previously used email address.
+* Click on **Allow** button.
+
+## Reports
+
+* Open Reports folder after running framework.
+* Report will generate for each TestFlow.
+
+![alt text](https://i.imgur.com/GQBHcIb.png)
+
+## Limitation
+
+If user retrieves **List of value** from response for e.g @googleplace.24.status@ and user want to replace all list value to URL,Parameters,Headers is not possible.
+ 
+**Alternate**:User can replace with @googleplace.24.status[0]@ or @googleplace.24.status[1]@

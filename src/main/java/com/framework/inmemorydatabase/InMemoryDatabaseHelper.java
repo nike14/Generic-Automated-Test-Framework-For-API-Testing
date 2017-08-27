@@ -47,7 +47,7 @@ public class InMemoryDatabaseHelper {
 					+ InMemoryDatabaseHelperConstant.TESTCASEID.toString() + " int,"
 					+ InMemoryDatabaseHelperConstant.SHEETNAME.toString() + " VARCHAR(50),"
 					+ InMemoryDatabaseHelperConstant.PATHVALUE.toString() + " VARCHAR(50),"
-					+ InMemoryDatabaseHelperConstant.RESPONSEVALUE.toString() + " VARCHAR(1000) NOT NULL);");
+					+ InMemoryDatabaseHelperConstant.RESPONSEVALUE.toString() + " VARCHAR(20000) NOT NULL);");
 
 		} catch (Exception e) {
 			System.out.println("Exception in create Table for Database:" + e);

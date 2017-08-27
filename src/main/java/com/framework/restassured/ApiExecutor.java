@@ -6,10 +6,9 @@ package com.framework.restassured;
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.util.LinkedHashMap;
-
 import org.apache.http.util.TextUtils;
+import org.testng.SkipException;
 
 import com.framework.constants.Constants.ApiExecutorConstants;
 import com.framework.constants.Constants.ExcelColumnNameConstant;
@@ -27,7 +26,6 @@ import io.restassured.specification.RequestSpecification;
  */
 
 public class ApiExecutor {
-	APIExecutorHelper apiExecutorHelperObj = new APIExecutorHelper();
 	RestAssuredConfig config = RestAssured.config()
 			.httpClient(HttpClientConfig.httpClientConfig().setParam("CONNECTION_MANAGER_TIMEOUT", 3000));
 
@@ -37,7 +35,7 @@ public class ApiExecutor {
 	 * getapi.
 	 */
 	public Response apiGet(LinkedHashMap<String, String> data, ExtentTest extentTest) {
-		String url = apiExecutorHelperObj.getUrl(data);
+		String url = APIExecutorHelper.getUrl(data);
 		extentTest.log(LogStatus.INFO, "URL-->" + url);
 		extentTest.log(LogStatus.INFO, "Input json" + data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 		Response resp = null;
@@ -46,22 +44,30 @@ public class ApiExecutor {
 					.body(data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTHEADERS.toString()))) {
-				extentTest.log(LogStatus.INFO, "Headers-->" + apiExecutorHelperObj.setHeaders(data));
-				rs = rs.given().headers(apiExecutorHelperObj.setHeaders(data));
+				if (APIExecutorHelper.isDynamicValuePresent(url, data)) {
+					extentTest.log(LogStatus.SKIP,
+							"URL,Input Json or Headers dynamic values not replaces with actual value.");
+					throw new SkipException("Skipping this exception");
+				} else {
+					extentTest.log(LogStatus.INFO, "Headers-->" + APIExecutorHelper.setHeaders(data));
+					rs = rs.given().headers(APIExecutorHelper.setHeaders(data));
+				}
 			}
 
 			resp = rs.when().get(url).then().extract().response();
 			extentTest.log(LogStatus.INFO, "Response" + resp.asString());
 			long executionTimeInMillis = resp.getTime();
-			apiExecutorHelperObj.printTestExecutionTime(executionTimeInMillis, extentTest);
+			APIExecutorHelper.printTestExecutionTime(executionTimeInMillis, extentTest);
 
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString()))) {
 				assertThat(resp.asString(),
 						matchesJsonSchemaInClasspath(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString())));
 			}
+		} catch (SkipException e) {
+			extentTest.log(LogStatus.SKIP, "Skip " + e.getMessage());
 		} catch (Exception e) {
 			extentTest.log(LogStatus.FAIL, "Fail " + e.getMessage());
-			org.testng.Assert.fail("*******************************api_Get_schemavalidator " + e.getMessage());
+			org.testng.Assert.fail("*******************************apiGet: " + e.getMessage());
 		}
 		return resp;
 
@@ -74,7 +80,7 @@ public class ApiExecutor {
 	 */
 
 	public Response apiPost(LinkedHashMap<String, String> data, ExtentTest extentTest) {
-		String url = apiExecutorHelperObj.getUrl(data);
+		String url = APIExecutorHelper.getUrl(data);
 		Response resp = null;
 		try {
 			extentTest.log(LogStatus.INFO, "URL-->" + url);
@@ -82,24 +88,33 @@ public class ApiExecutor {
 			RequestSpecification rs = given().contentType(ApiExecutorConstants.CONTENTTYPE.toString())
 					.body(data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTHEADERS.toString()))) {
-				extentTest.log(LogStatus.INFO, "Headers-->" + apiExecutorHelperObj.setHeaders(data));
-				rs = rs.given().headers(apiExecutorHelperObj.setHeaders(data));
+				if (APIExecutorHelper.isDynamicValuePresent(url, data)) {
+					extentTest.log(LogStatus.SKIP,
+							"URL,Input Json or Headers dynamic values not replaces with actual value.");
+					throw new SkipException("Skipping this exception");
+				} else {
+					extentTest.log(LogStatus.INFO, "Headers-->" + APIExecutorHelper.setHeaders(data));
+					rs = rs.given().headers(APIExecutorHelper.setHeaders(data));
+				}
 			}
 
 			resp = rs.when().post(url).then().extract().response();
 			extentTest.log(LogStatus.INFO, "Response" + resp.asString());
 			long executionTimeInMillis = resp.getTime();
-			apiExecutorHelperObj.printTestExecutionTime(executionTimeInMillis, extentTest);
+			APIExecutorHelper.printTestExecutionTime(executionTimeInMillis, extentTest);
 
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString()))) {
 				assertThat(resp.asString(),
 						matchesJsonSchemaInClasspath(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString())));
 			}
 
+		} catch (SkipException e) {
+			extentTest.log(LogStatus.SKIP, "Skip " + e.getMessage());
 		} catch (Exception e) {
 			extentTest.log(LogStatus.FAIL, "Fail " + e.getMessage());
-			org.testng.Assert.fail("*******************************api_Post_schemavalidator: " + e.getMessage());
+			org.testng.Assert.fail("*******************************apiPost: " + e.getMessage());
 		}
+
 		return resp;
 	}
 
@@ -110,7 +125,7 @@ public class ApiExecutor {
 	 */
 
 	public Response apiPut(LinkedHashMap<String, String> data, ExtentTest extentTest) {
-		String url = apiExecutorHelperObj.getUrl(data);
+		String url = APIExecutorHelper.getUrl(data);
 		extentTest.log(LogStatus.INFO, "URL-->" + url);
 		Response resp = null;
 		try {
@@ -118,22 +133,30 @@ public class ApiExecutor {
 			RequestSpecification rs = given().contentType(ApiExecutorConstants.CONTENTTYPE.toString())
 					.body(data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTHEADERS.toString()))) {
-				extentTest.log(LogStatus.INFO, "Headers-->" + apiExecutorHelperObj.setHeaders(data));
-				rs = rs.given().headers(apiExecutorHelperObj.setHeaders(data));
+				if (APIExecutorHelper.isDynamicValuePresent(url, data)) {
+					extentTest.log(LogStatus.SKIP,
+							"URL,Input Json or Headers dynamic values not replaces with actual value.");
+					throw new SkipException("Skipping this exception");
+				} else {
+					extentTest.log(LogStatus.INFO, "Headers-->" + APIExecutorHelper.setHeaders(data));
+					rs = rs.given().headers(APIExecutorHelper.setHeaders(data));
+				}
 			}
 			resp = rs.when().put(url).then().extract().response();
 			extentTest.log(LogStatus.INFO, "Response" + resp.asString());
 			long executionTimeInMillis = resp.getTime();
-			apiExecutorHelperObj.printTestExecutionTime(executionTimeInMillis, extentTest);
+			APIExecutorHelper.printTestExecutionTime(executionTimeInMillis, extentTest);
 
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString()))) {
 				assertThat(resp.asString(),
 						matchesJsonSchemaInClasspath(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString())));
 			}
 
+		} catch (SkipException e) {
+			extentTest.log(LogStatus.SKIP, "Skip " + e.getMessage());
 		} catch (Exception e) {
 			extentTest.log(LogStatus.FAIL, "Fail " + e.getMessage());
-			org.testng.Assert.fail("*******************************apiPut:" + e.getMessage());
+			org.testng.Assert.fail("*******************************apiPut: " + e.getMessage());
 		}
 		return resp;
 	}
@@ -145,7 +168,7 @@ public class ApiExecutor {
 	 */
 
 	public Response apiDelete(LinkedHashMap<String, String> data, ExtentTest extentTest) {
-		String url = apiExecutorHelperObj.getUrl(data);
+		String url = APIExecutorHelper.getUrl(data);
 		extentTest.log(LogStatus.INFO, "URL-->" + url);
 		Response resp = null;
 		try {
@@ -153,28 +176,36 @@ public class ApiExecutor {
 			RequestSpecification rs = given().contentType(ApiExecutorConstants.CONTENTTYPE.toString())
 					.body(data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTHEADERS.toString()))) {
-				extentTest.log(LogStatus.INFO, "Headers-->" + apiExecutorHelperObj.setHeaders(data));
-				rs = rs.given().headers(apiExecutorHelperObj.setHeaders(data));
+				if (APIExecutorHelper.isDynamicValuePresent(url, data)) {
+					extentTest.log(LogStatus.SKIP,
+							"URL,Input Json or Headers dynamic values not replaces with actual value.");
+					throw new SkipException("Skipping this exception");
+				} else {
+					extentTest.log(LogStatus.INFO, "Headers-->" + APIExecutorHelper.setHeaders(data));
+					rs = rs.given().headers(APIExecutorHelper.setHeaders(data));
+				}
 			}
 			resp = rs.when().delete(url).then().extract().response();
 			extentTest.log(LogStatus.INFO, "Response" + resp.asString());
 			long executionTimeInMillis = resp.getTime();
-			apiExecutorHelperObj.printTestExecutionTime(executionTimeInMillis, extentTest);
+			APIExecutorHelper.printTestExecutionTime(executionTimeInMillis, extentTest);
 
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString()))) {
 				assertThat(resp.asString(),
 						matchesJsonSchemaInClasspath(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString())));
 			}
 
+		} catch (SkipException e) {
+			extentTest.log(LogStatus.SKIP, "Skip " + e.getMessage());
 		} catch (Exception e) {
 			extentTest.log(LogStatus.FAIL, "Fail " + e.getMessage());
-			org.testng.Assert.fail("*******************************apiDelete:" + e.getMessage());
+			org.testng.Assert.fail("*******************************apiDelete: " + e.getMessage());
 		}
 		return resp;
 	}
 
 	public Response apiPatch(LinkedHashMap<String, String> data, ExtentTest extentTest) {
-		String url = apiExecutorHelperObj.getUrl(data);
+		String url = APIExecutorHelper.getUrl(data);
 		extentTest.log(LogStatus.INFO, "URL-->" + url);
 		Response resp = null;
 		try {
@@ -182,22 +213,30 @@ public class ApiExecutor {
 			RequestSpecification rs = given().contentType(ApiExecutorConstants.CONTENTTYPE.toString())
 					.body(data.get(ExcelColumnNameConstant.TESTINPUTJSON.toString()));
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTHEADERS.toString()))) {
-				extentTest.log(LogStatus.INFO, "Headers-->" + apiExecutorHelperObj.setHeaders(data));
-				rs = rs.given().headers(apiExecutorHelperObj.setHeaders(data));
+				if (APIExecutorHelper.isDynamicValuePresent(url, data)) {
+					extentTest.log(LogStatus.SKIP,
+							"URL,Input Json or Headers dynamic values not replaces with actual value.");
+					throw new SkipException("Skipping this exception");
+				} else {
+					extentTest.log(LogStatus.INFO, "Headers-->" + APIExecutorHelper.setHeaders(data));
+					rs = rs.given().headers(APIExecutorHelper.setHeaders(data));
+				}
 			}
 			resp = rs.when().patch(url).then().extract().response();
 			extentTest.log(LogStatus.INFO, "Response" + resp.asString());
 			long executionTimeInMillis = resp.getTime();
-			apiExecutorHelperObj.printTestExecutionTime(executionTimeInMillis, extentTest);
+			APIExecutorHelper.printTestExecutionTime(executionTimeInMillis, extentTest);
 
 			if (!TextUtils.isEmpty(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString()))) {
 				assertThat(resp.asString(),
 						matchesJsonSchemaInClasspath(data.get(ExcelColumnNameConstant.TESTSCHEMANAME.toString())));
 			}
 
+		} catch (SkipException e) {
+			extentTest.log(LogStatus.SKIP, "Skip " + e.getMessage());
 		} catch (Exception e) {
 			extentTest.log(LogStatus.FAIL, "Fail " + e.getMessage());
-			org.testng.Assert.fail("*******************************apiPatch:" + e.getMessage());
+			org.testng.Assert.fail("*******************************apiPatch: " + e.getMessage());
 		}
 		return resp;
 	}
